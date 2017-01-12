@@ -62,8 +62,9 @@ def delete_content_version(cv_version):
     command = 'hammer content-view version delete --id %s' % cv_version['ID']
     print('Deleting: %s' % cv_version['Name'])
     if not DEBUG:
-        result = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+        result = subprocess.Popen(shlex.split(command))
         result.wait()
+        return result.returncode
         
 
 def backup_content(cv_org, cv_label, cv_version):
@@ -91,8 +92,11 @@ def main():
         if not content_versions_to_remove:
             continue
         for version in content_versions_to_remove:
-            delete_content_version(version)
-            backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
+            delete_returncode = delete_content_version(version)
+            if delete_returncode == 0:
+                backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
+            else:
+                print("Skipping content backup as content still in use.")
     print("\nCleaning unused 'Composite' views..")
     for view in composite_views:
         print("Processing: %s" % view['Label'])
@@ -100,8 +104,12 @@ def main():
         if not content_versions_to_remove:
             continue
         for version in content_versions_to_remove:
-            delete_content_version(version)
-            backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
+            delete_returncode = delete_content_version(version)
+            if delete_returncode == 0:
+                backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
+            else:
+                print("Skipping content backup as content still in use.")
+
 
 if __name__ == '__main__':
    main()
