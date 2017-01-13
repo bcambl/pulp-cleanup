@@ -107,7 +107,7 @@ def main():
             continue
         for version in content_versions_to_remove:
             delete_returncode = delete_content_version(version)
-            if delete_returncode == 0:
+            if (delete_returncode == 0) or (DEBUG and delete_returncode == None):
                 backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
             else:
                 print("Skipping content backup as content still in use.")
@@ -119,7 +119,7 @@ def main():
             continue
         for version in content_versions_to_remove:
             delete_returncode = delete_content_version(version)
-            if delete_returncode == 0:
+            if (delete_returncode == 0) or (DEBUG and delete_returncode == None):
                 backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
             else:
                 print("Skipping content backup as content still in use.")
