@@ -28,12 +28,26 @@ __date__ = '2016-07-06'
 
 DEBUG = True
 
+try:
+    # try to load site specific settings from settings.json in local directory
+    with open('settings.json', 'r') as f:
+        settings = json.load(f)
+except (IOError, ValueError):
+    # if settings.json does not exist, gather information from user and save to file
+    print("a valid settings.json was not found.")
+    organization = raw_input("Provide an organization label: ")
+    backup_directory = raw_input("Provide full path to backup location: ")
+    settings = {"ORG_LABEL": organization, "BACKUP_DIR": backup_directory}
+    with open('settings.json', 'w') as f:
+        json.dump(settings, f)
+
+
 # Content Organization Label:
-ORG_LABEL = 'Acme_Corporation'
-# Pulp directory to clean (default location):
+ORG_LABEL = settings['ORG_LABEL']
+# Pulp directory to clean:
 PULP_DIR = '/var/lib/pulp/published/yum/master'
 # Backup directory:
-BACKUP_DIR = '/pulp_backup'
+BACKUP_DIR = settings['BACKUP_DIR']
 
 
 def all_content_views():
