@@ -3,6 +3,7 @@ import subprocess
 import shutil
 import shlex
 import json
+import time
 import glob
 import os
 """
@@ -48,6 +49,14 @@ ORG_LABEL = settings['ORG_LABEL']
 PULP_DIR = '/var/lib/pulp/published/yum/master'
 # Backup directory:
 BACKUP_DIR = settings['BACKUP_DIR']
+
+
+# Set a 'wait_time' between the deletion of content views when DEBUG is disabled.
+# This pause will allow various indexing/background tasks to complete reducing server load.
+# Note: This is only required on Satellite 6.1.x (hense the check for a 6.1.x specific file)
+wait_time = 0
+if not DEBUG and os.path.isfile('/usr/share/foreman/lib/satellite/version.rb'):
+    wait_time = 120
 
 
 def all_content_views():
@@ -107,6 +116,7 @@ def main():
             continue
         for version in content_versions_to_remove:
             delete_returncode = delete_content_version(version)
+            time.sleep(wait_time)
             if (delete_returncode == 0) or (DEBUG and delete_returncode == None):
                 backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
             else:
@@ -119,6 +129,7 @@ def main():
             continue
         for version in content_versions_to_remove:
             delete_returncode = delete_content_version(version)
+            time.sleep(wait_time)
             if (delete_returncode == 0) or (DEBUG and delete_returncode == None):
                 backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
             else:
