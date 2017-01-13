@@ -8,9 +8,8 @@ the majority of the disk space can be recovered by only removing the yum content
 with the deleted versions.
 
 Usage:
-- Modify `ORG_LABEL` and `BACKUP_DIR` to suit your implementation
 - The script should be safe to execute with `DEBUG = True`. 
-- Carefully review the stdout *before* disabling `DEBUG`.
+- Carefully review the stdout *before* setting `DEBUG = False`.
 
 Scripted Tasks:
 - Delete 'content' view versions older than n-1 (keep previous version for rollback purposes)
