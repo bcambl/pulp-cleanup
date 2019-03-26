@@ -108,8 +108,8 @@ def main():
     all_views = all_content_views()
     content_views = [x for x in all_views if not x['Composite']]
     composite_views = [x for x in all_views if x['Composite']]
-    print("\nCleaning unused 'Content' views..")
-    for view in content_views:
+    print("\nCleaning unused 'Composite' views..")
+    for view in composite_views:
         print("Processing: %s" % view['Label'])
         content_versions_to_remove = old_content_versions(view['Content View ID'])
         if not content_versions_to_remove:
@@ -121,8 +121,8 @@ def main():
                 backup_content(ORG_LABEL, view['Label'], str(int(float(version['Version']))))
             else:
                 print("Skipping content backup as content still in use.")
-    print("\nCleaning unused 'Composite' views..")
-    for view in composite_views:
+    print("\nCleaning unused 'Content' views..")
+    for view in content_views:
         print("Processing: %s" % view['Label'])
         content_versions_to_remove = old_content_versions(view['Content View ID'])
         if not content_versions_to_remove:
