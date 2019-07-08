@@ -93,15 +93,16 @@ def delete_content_version(cv_version):
 def backup_content(cv_org, cv_label, cv_version):
     content_expression = '%s/%s-%s-%s_*' % (PULP_DIR, cv_org, cv_label, cv_version)
     related_content = glob.glob(content_expression)
-    for content in related_content:
-        if os.path.exists(content):
-            print("Backup Source: %s" % content)
-            print("Backup Destination: %s%s" % (BACKUP_DIR, content))
-            if not DEBUG:
-                shutil.move(content, "%s%s" % (BACKUP_DIR, content))
-        else:
-            # incremental versions will cause this condition.
-            print("Skipping Backup (Source directory does not exist): %s" % content)
+    if related_content:
+        for content in related_content:
+            if os.path.exists(content):
+                print("Backup Source: %s" % content)
+                print("Backup Destination: %s%s" % (BACKUP_DIR, content))
+                if not DEBUG:
+                    shutil.move(content, "%s%s" % (BACKUP_DIR, content))
+            else:
+                # incremental versions will cause this condition.
+                print("Skipping Backup (Source directory does not exist): %s" % content)
 
  
 def main():
