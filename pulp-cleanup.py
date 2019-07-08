@@ -27,7 +27,6 @@ Tested on Satellite 6.1.x -> 6.2.6
 __author__ = 'Blayne Campbell'
 __date__ = '2016-07-06'
 
-DEBUG = True
 
 try:
     # try to load site specific settings from settings.json in local directory
@@ -38,11 +37,12 @@ except (IOError, ValueError):
     print("a valid settings.json was not found.")
     organization = raw_input("Provide an organization label: ")
     backup_directory = raw_input("Provide full path to backup location: ")
-    settings = {"ORG_LABEL": organization, "BACKUP_DIR": backup_directory}
+    settings = {"ORG_LABEL": organization, "BACKUP_DIR": backup_directory, "DEBUG": True}
     with open('settings.json', 'w') as f:
         json.dump(settings, f)
 
-
+# Set debug variable:
+DEBUG = settings['DEBUG']
 # Content Organization Label:
 ORG_LABEL = settings['ORG_LABEL']
 # Pulp directory to clean:
