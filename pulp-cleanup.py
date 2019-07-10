@@ -7,22 +7,9 @@ import time
 import glob
 import os
 """
-Workaround for Red Hat Bugzilla #1184442 & #1317057
-===================================================
-Early versions of Satellite (6.1.x) contained a bug where the content was saved to the wrong
-location. After each un-used Content View is removed, the script will check if there is content
-in the wrong location and move the data to a backup directory (in-case recovery is required).
-If aforementioned files are not found, no action will be taken and script will continue to next
-Content View.
-
-Tasks:
-- Delete content-view versions older than n-1 (keep previous version for rollback purposes)
-- Move related Pulp yum content to a backup directory to be manually deleted at a later date
-
-WARNING:
-DO NOT RUN THIS SCRIPT IF YOU WANT TO KEEP CONTENT VERSIONS NOT CURRENTLY IN A LIFECYCLE!!!
-
-Tested on Satellite 6.1.x -> 6.2.6
+pulp-cleanup
+============
+Scripted removal of old composite & content view versions (_n munus 1_ by default)
 """
 __author__ = 'Blayne Campbell'
 __date__ = '2016-07-06'
